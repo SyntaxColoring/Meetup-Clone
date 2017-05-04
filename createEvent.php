@@ -1,8 +1,8 @@
 <?php
 	#Create Event php code.
-
-	include("meetupConfig.php");
 	
+	include("meetupConfig.php");
+	session_start();
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
 	
 		$etitle = $_POST['title'];
