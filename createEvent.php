@@ -13,6 +13,7 @@
 		$elname = $_POST['lname'];
 		$ezip = $_POST['zipcode'];
 		
+		checkLocation($elname, $ezip);
 		
 		$stmt = $db->prepare("INSERT into events(title, description, start_time, end_time, group_id, lname, zip)
 		VALUES(?, ?, ?, ?, ?, ?, ?)");
@@ -29,6 +30,28 @@
 
 
 }
+
+	function checkLocation($lname, $zippy){
+		$lstmt = $db->prepare("SELECT lname, zip FROM location where lname = ? AND zip = ?");
+		$lstmt->bind_param('si', $lname, $zippy);
+		$lstmt->execute();
+		
+		$result = $lstmt->get_result();
+		
+		if(mysqli_num_rows($result) >= 1){
+			$lstmt->close();
+			return;
+		}
+		else{
+			$lstmt->close();
+			$lstmt = $db->prepare("INSERT INTO location(lname, zip) VALUES(?, ?)");
+			$lstmt->bind_param('si', $lname, $zippy);
+			$lstmt->execute();
+			$lstmt->close();
+			return;
+		}
+	
+	}
 
 
 	function authorizedUser($useri, $groupi){
