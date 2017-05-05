@@ -15,7 +15,7 @@
 		while($row = $result->fetch_assoc()){
 		# This is the code for displaying the dates for events today and the next three days
 		# Max can you add the code for outputting the events 
-			echo "Title: " . $row['events.title'] . " When: " . $row['events.start_time'] "<br>";
+			echo "Title: " . $row['title'] . " When: " . $row['start_time'] "<br>";
 		}
 	}
 
