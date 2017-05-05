@@ -17,13 +17,18 @@ session_start();
 			$result = $stat->get_result();
 			$stat->close();
 			
-			#div tag echoed.  
-			while($row = $result->fetch_assoc()){
+			#div tag echoed.
+			if(mysqli_num_rows($result) > 0){
+				while($row = $result->fetch_assoc()){
 			#group name displayed multiple times
 				echo $row['gname'];
-			
 			}
 			#end of div tag
+			}
+			else{
+				echo "No groups with that interest." #print echo for telling user no groups with that interest
+			}
+			
 			
 		}
 	
