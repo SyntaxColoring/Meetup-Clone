@@ -3,7 +3,7 @@
 	include("meetupConfig.php");
 	session_start();
 	
-	$stmt = $db->prepare("SELECT groups.group_name FROM groups INNER JOIN belongs_to
+	$stmt = $db->prepare("SELECT groups.group_name AS gname FROM groups INNER JOIN belongs_to
 						ON groups.group_id = belongs_to.groups_id 
 						WHERE belongs_to.username");
 	$userN = $_SESSION['login_user'];
@@ -15,7 +15,7 @@
 	$stmt->close();
 	
 	while($row = $result->fetch_assoc()){
-		# print the $row[groups.group_name] which the user is affiliated with.
+		# print the $row['gname'] which the user is affiliated with.
 	
 	}
 
