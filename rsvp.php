@@ -4,10 +4,9 @@
 #Redwanul Mutee, rm4243
 #Max Marrone, mpm507
 include("meetupConfig.php");
+session_start();
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-	$eventN = $_POST['eventName'];
-
 	$eID = $_POST['event_id'];
 	$postVal = $_POST['rsvp'];
 	$userN = $_SESSION['login_user'];
@@ -17,41 +16,32 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	$sqlStat->execute();
 	$result = $sqlStat->get_result();
 	
-	$countRow = mysqli_num_rows($result)
+	$countRow = mysqli_num_rows($result);
 	
+	// If the user has RSVPd to this event in the past, we need to update that
+	// record instead of inserting a new one.
 	if($countRow > 0){
-		if($result['rsvp'] == 1){
-			$sqlStat->close();
-			$db->close;
-			header("Location: ");
-			exit;
-			
-		else{
-			$sqlStat->close();
-			$sqlStat = $db->prepare("UPDATE attend SET rsvp = 1 where username = ?  AND event_id = ?");
-			$sqlStat->bind_param('si', $userN, $eID);
-			$sqlStat->execute();
-			$sqlStat->close();
-			$db->close();
-			header("Location: ");
-			exit;
-		}
-		
-	}
-	
-	if(mysql_num_rows($result) == 0){
 		$sqlStat->close();
-		$sqlStat = $db->prepare("INSERT INTO attend(event_id, username, rsvp) values(?, ?, ?)");
-		$sqlStat->bind_param('isi', $eID, $userN, $postVal);
+		$sqlStat = $db->prepare("UPDATE attend SET rsvp = ? where username = ?  AND event_id = ?");
+		$sqlStat->bind_param('isi', $postVal, $userN, $eID);
+		$sqlStat->execute();
 		$sqlStat->close();
 		$db->close();
-		header("Location: ");
-		exit;
+		$_SESSION['rsvp_message'] = "RSVP updated.";
 	}
 	
+	else {
+		$rating = 0;
+		$sqlStat->close();
+		$sqlStat = $db->prepare("INSERT INTO attend(event_id, username, rsvp, rating) values(?, ?, ?, ?)");
+		$sqlStat->bind_param('isii', $eID, $userN, $postVal, $rating);
+		$sqlStat->execute();
+		$sqlStat->close();
+		$db->close();
+		$_SESSION['rsvp_message'] = "RSVPd!";
+	}
 	
+	header("Location: /event.php?id=$eID");
+	exit;
 }
-
-
-
 ?>
