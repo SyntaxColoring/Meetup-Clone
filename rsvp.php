@@ -18,7 +18,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	$countRow = mysqli_num_rows($result)
 	
 	if($countRow > 0){
-		if($result['authorized'] == 1){
+		if($result['rsvp'] == 1){
 			$sqlStat->close();
 			$db->close;
 			header("Location: ");
