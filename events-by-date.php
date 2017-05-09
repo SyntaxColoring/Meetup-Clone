@@ -24,9 +24,10 @@
 		$result = $statement->get_result();
 		
 		while($row = $result->fetch_assoc()) {
+			$id = $row['event_id'];
 			$title = $row['title'];
 			$start_time = $row['start_time'];
-			echo "<li>$title ($start_time)</li>";
+			echo "<li><a href=\"event.php?id=$id\">$title</a> ($start_time)</li>";
 		}
 		
 		$result->free();
@@ -36,10 +37,10 @@
 	</ul>
 	<form action="" method="get">
 		<div>
-			<label>From <input name="from" type="datetime-local"></label>
+			<label>From <input name="from" type="date"></label>
 		</div>
 		<div>
-			<label>To <input name="to" type="datetime-local"></label>
+			<label>To <input name="to" type="date"></label>
 		</div>
 		<input type="submit" value="Search">
 	</form>
