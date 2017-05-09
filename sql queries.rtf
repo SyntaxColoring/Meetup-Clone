@@ -1,0 +1,39 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf820
+{\fonttbl\f0\froman\fcharset0 TimesNewRomanPSMT;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs24 \cf0 SELECT lname, zip FROM location where lname = ? AND zip = ?\
+\
+This sql statement gets the entry in which lname equals to the inputed location name and the zip code inputed as well.\
+\
+\
+INSERT into events (title, description, start_time, end_time, group_id, lname, zip)\
+VALUES(?,?,?,?,?,?,?)\
+\
+This sql statement inserted the inputed information for the event that the authorized user is creating.\
+\
+\
+SELECT * FROM events WHERE event_id = ?\
+\
+This statement retrieves all of the entries where the event_id equals to the select event that was made.\
+\
+\
+SELECT * FROM events WHERE start_time BETWEEN ? AND ? ORDER BY start_time DESC\
+\
+This statement selects all of the entries if their start_time is between the inputed range that the user has entered.\
+\
+SELECT * FROM groups WHERE group_id = ?\
+\
+This statement gets all of the entries in which the group_id equal to the inputed group_id value.\
+\
+\
+SELECT * FROM events WHERE group_id = ? ORDER BY start_time DESC\
+\
+This statement selects the entries which equal to the inputed group_id and it outputs them from the earliest date to the latest date found in the table.\
+\
+\
+}
