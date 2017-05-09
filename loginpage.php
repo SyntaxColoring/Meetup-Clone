@@ -1,73 +1,132 @@
+<!DOCTYPE html>
 <?php
-	include("meetupConfig.php");
+	include('meetupConfig.php');
 	session_start();
 	
-	if($_SERVER["REQUEST_METHOD"] == "POST"){
-		$userN =  $_POST['username'];
-		$passN =  md5($_POST['password']);
-		
-
-		$sqlStmt = $db->prepare("SELECT username, password FROM member where username = ? AND password = ?");
-		$sqlStmt->bind_param("ss", $userN, $passN);
-		$sqlStmt->execute();
-		
-		$result = $sqlStmt->get_result();
-		$count = mysqli_num_rows($result);
-		$sqlStmt->close();
-		$db->close();
-		if($count == 1){
-			$_SESSION['login_user'] = $userN;
-			header("location: welcome.php");
+	if($_SERVER['REQUEST_METHOD'] == 'POST') {
+		if ($_POST['form'] == 'login') {
+			$user = $_POST['login-username'];
+			$pass = md5($_POST['login-password']);
+			$statement = $db->prepare('SELECT COUNT(*) FROM member WHERE username = ? AND password = ?');
+			$statement->bind_param('ss', $user, $pass);
+			$statement->execute();
+			$result = $statement->get_result();
+			$count = $result->fetch_row()[0];
+			$result->free();
+			$statement->close();
+			$db->close();
+			if ($count == 1) {
+				$_SESSION['login_user'] = $user;
+				header('Location: welcome.php');
+			}
+			else {
+				$login_error = 'Wrong username or password.';
+			}
 		}
-		else{
-			$error = "Your Username or Password is not valid" . $count;
+		
+		else if ($_POST['form'] == 'register') {
+			$user = $_POST['register-username'];
+			$first = $_POST['register-first-name'];
+			$last = $_POST['register-last-name'];
+			$zip = $_POST['register-zip'];
+			$pass = $_POST['register-password'];
+			$passConfirmation = $_POST['register-retype-password'];
+			
+			// Basic validation...
+			if (strlen($user) < 5) {
+				$register_error = 'That username is too short.';
+			}
+			else if (strlen($zip) != 5) {
+				$register_error = 'Please enter a valid 5-digit ZIP code.';
+			}
+			else if ($pass != $passConfirmation) {
+				$register_error = 'Those passwords don\'t match.  Try again.';
+			}
+			else if (strlen($pass) < 5){
+				$register_error = 'That password is too short.';
+			}
+			
+			else {
+				// We need to query the DB to make sure the username
+				// isn't taken already, even if it looks valid.
+				
+				$statement = $db->prepare('SELECT COUNT(*) FROM member WHERE username = ?');
+				$statement->bind_param('s', $user);
+				$statement->execute();
+				$result = $statement->get_result();
+				$count = $result->fetch_row()[0];
+				$result->free();
+				$statement->close();
+				if ($count > 0) {
+					$register_error = 'That username is already taken.';
+				}
+				else {
+					// Now we actually create the user.
+					$statement = $db->prepare('INSERT INTO member (username, password, firstname, lastname, zipcode) VALUES (?, ?, ?, ?, ?)');
+					$statement->bind_param('sssss', $user, md5($pass), $first, $last, $zip);
+					$statement->execute();
+				}
+				$db->close();
+			}
 		}
-	
 	}
 
 ?>
-
-
 <html>
 <head>
-
-<style>
-div.center{
-	margin:auto;
-	width: 50%;
-	text-align: center;
-}
-
-</style>
-
-
+	<title>Meetup - Login or register</title>
+	<meta charset="utf-8">
 </head>
-
-
 <body>
-
-<div class = "center">
-<form action = "" method = "post" accept-charset="UTF-8" >
-	<label>Username: </label><input type = "text" name = "username" class = "box"/><br></br>
-	<lable>Password: </label><input type = "password" name = "password" class = "box"/><br></br>
-	<input type = "submit" value = "Submit"/><br></br>
-
-</form>
-</div>
-
-<div style = "font-size:11px; color:#cc0000; margin-top:10px">
-<?php 
-echo $error; 
-
-
-?>
-
-</div>
-
-
+<?php include('header.php'); ?>
+	<h2>Login</h2>
+	<form action="" method="post">
+		<div><label>
+			Username
+			<input type="text" name="login-username">
+		</label></div>
+		<div><label>
+			Password
+			<input type="password" name="login-password">
+		</label></div>
+		<input type="hidden" name="form" value="login">
+		<input type="submit" value="Log in">
+	</form>
+	<?php if (isset($login_error) && $login_error !== '') {
+		echo "<p>Error: $login_error</p>";
+	} ?>
+	
+	<h2>Register</h2>
+	<form action="" method="post">
+		<div><label>
+			Username
+			<input type="text" name="register-username">
+		</label></div>
+		<div><label>
+			First name
+			<input type="text" name="register-first-name">
+		</label></div>
+		<div><label>
+			Last name
+			<input type="text" name="register-last-name">
+		</label></div>
+		<div><label>
+			ZIP code
+			<input type="text" name="register-zip">
+		</label></div>
+		<div><label>
+			Password
+			<input type="password" name="register-password">
+		</label></div>
+		<div><label>
+			Retype password
+			<input type="password" name="register-retype-password">
+		</label></div>
+		<input type="hidden" name="form" value="register">
+		<input type="submit" value="Register">
+	</form>
+	<?php if (isset($register_error) && $register_error !== '') {
+		echo "<p>Error: $register_error</p>";
+	} ?>
 </body>
-
-
-
-
 </html>
