@@ -15,7 +15,7 @@
 			$interest = $_GET['interest'];
 			echo "<h2>Groups interested in $interest</h2>";
 			
-			$stat = $db->prepare('SELECT groups.group_name as gname FROM about inner join groups 
+			$stat = $db->prepare('SELECT groups.group_name as gname, groups.group_id as gid FROM about inner join groups 
 			                      ON about.group_id = groups.group_id
 			                      WHERE about.interest_name = ?');
 			
@@ -26,7 +26,7 @@
 			if (mysqli_num_rows($result) > 0) {
 				echo '<ul>';
 				while ($row = $result->fetch_assoc()) {
-					echo '<li>' . $row['gname'] . '</li>';
+					echo '<li><a href="group.php?id='.$row['gid'].'">'.$row['gname'].'</a></li>';
 				}
 				echo '</ul>';
 			}
