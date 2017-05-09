@@ -1,7 +1,6 @@
 <?php
-	Session_start();
-	if(Session_destroy()){
-		header("location: loginpage.php");
+	session_start();
+	if(session_destroy()){
+		header('Location: login.php');
 	}
-
 ?>
