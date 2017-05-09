@@ -2,7 +2,7 @@
 <?php
 	if (isset($_SESSION['login_user'])) {
 		
-		echo '<p>Welcome, ' . $_SESSION['login_user'] . '. <a href="logout.php">Log out</a></p>';
+		echo '<p>Welcome, <a href="user-home.php">' . $_SESSION['login_user'] . '</a>. <a href="logout.php">Log out</a></p>';
 	}
 	else {
 		echo '<p><a href="login.php">Log in or register</a></p>';
