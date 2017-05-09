@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 	include('meetupConfig.php');
 	session_start();
@@ -17,7 +16,7 @@
 			$db->close();
 			if ($count == 1) {
 				$_SESSION['login_user'] = $user;
-				header('Location: welcome.php');
+				header('Location: /');
 			}
 			else {
 				$login_error = 'Wrong username or password.';
@@ -67,11 +66,12 @@
 					$statement->execute();
 				}
 				$db->close();
+				
+				header('Location: /');
 			}
 		}
 	}
-
-?>
+?><!DOCTYPE html>
 <html>
 <head>
 	<title>Meetup - Login or register</title>
