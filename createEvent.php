@@ -1,8 +1,11 @@
 <?php
-	#Create Event php code.
-	
+#Create Event php code.
+#Peter Smondyrev, ps2816
+#Redwanul Mutee, rm4243
+#Max Marrone, mpm507
+
 	include("meetupConfig.php");
-	session_start();
+	
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
 	
 		$etitle = $_POST['title'];
@@ -57,8 +60,7 @@
 	function authorizedUser($useri, $groupi){
 		$sqlStug = $db->prepare("SELECT authorized from belongs_to where username = ? AND group_id = ?");
 		$sqlStug->bind_param('si', $useri, $groupi);
-		$sqlStug->execute;
-		$sqlStug->bind_result($authUse);
+		$sqlStug->execute();
 		$result = $sqlStug->get_result();
 		$rowug = $result->fetch_assoc();
 				
