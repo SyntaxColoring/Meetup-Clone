@@ -8,4 +8,4 @@
 		echo '<p><a href="login.php">Log in or register</a></p>';
 	}
 ?>
-<p><a href="">Home</a></p>
+<p><a href="/">Home</a></p>
