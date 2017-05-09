@@ -11,5 +11,6 @@
 <ul>
 	<li><a href="/">Home</a></li>
 	<li><a href="groups-by-interest.php">Find groups by interest</a></li>
+	<li><a href="events-by-date.php">Find events by date</a></li>
 </ul>
 
