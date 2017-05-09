@@ -2,8 +2,8 @@
 --
 -- Database: `meetup`
 --
--- CREATE DATABASE IF NOT EXISTS `meetup` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
--- USE `meetup`;
+CREATE DATABASE IF NOT EXISTS `meetup` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `meetup`;
 
 -- --------------------------------------------------------
 
