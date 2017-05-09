@@ -6,7 +6,7 @@
 include("meetupConfig.php");
 session_start();
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['login_user'])){
 	$eID = $_POST['event_id'];
 	$postVal = $_POST['rsvp'];
 	$userN = $_SESSION['login_user'];
@@ -40,7 +40,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		$db->close();
 		$_SESSION['rsvp_message'] = "RSVPd!";
 	}
-	
 	header("Location: /event.php?id=$eID");
 	exit;
 }
