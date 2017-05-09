@@ -9,6 +9,26 @@
 	</head>
 	<body>
 		<?php include('header.php'); ?>
+		<h2>Your groups</h2>
+		<ul>
+		<?php
+			$stmt = $db->prepare("SELECT groups.group_name AS gname, groups.group_id AS gid FROM groups INNER JOIN belongs_to
+			                      ON groups.group_id = belongs_to.group_id 
+			                      WHERE belongs_to.username = ?");
+			$userN = $_SESSION['login_user'];
+			$stmt->bind_param('s', $userN);
+			$stmt->execute();
+			
+			$result = $stmt->get_result();
+			
+			$stmt->close();
+			
+			while($row = $result->fetch_assoc()){
+				echo '<li><a href="group.php?id='.$row['gid'].'">'.$row['gname'].'</a></li>';
+			}
+		?>
+
+		</ul>
 		<h2>Your upcoming events</h2>
 		<ul>
 		<?php
@@ -26,6 +46,6 @@
 				echo '<li><a href="event.php?id='.$row['eid'] . '">' . $row['etitle'] . '</a> (' . $row['estart'] . ')</li>';
 			}
 		?>
-
+		</ul>
 	</body>
 </html>
