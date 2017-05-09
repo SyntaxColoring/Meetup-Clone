@@ -6,6 +6,9 @@
 		if ($_POST['form'] == 'login') {
 			$user = $_POST['login-username'];
 			$pass = md5($_POST['login-password']);
+			// We count the number of matching user-pass pairs.  If there are none,
+			// the given login credentials are invalid.  If there's exactly one,
+			// they're correct.  (If there's more than one, something's gone wrong.)
 			$statement = $db->prepare('SELECT COUNT(*) FROM member WHERE username = ? AND password = ?');
 			$statement->bind_param('ss', $user, $pass);
 			$statement->execute();
